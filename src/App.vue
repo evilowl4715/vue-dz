@@ -4,8 +4,8 @@ let date = new Date();
 
 <template>
 	<header></header>
-	<main>{{date}}</main>
-	<footer></footer>
+	<main>{{ date }}</main>
+	<footer>для повторки</footer>
 </template>
 
 <style scoped></style>
