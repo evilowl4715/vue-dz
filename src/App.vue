@@ -1,11 +1,19 @@
 <script setup>
 let date = new Date();
+import Button from './components/Button.vue';
+let btnBg = "red";
 </script>
 
 <template>
 	<header></header>
 	<main>{{ date }}</main>
-	<footer>для повторки</footer>
+	<footer>
+		<Button :customClass="`${btnBg}`">Button</Button>
+	</footer>
 </template>
 
-<style scoped></style>
+<style scoped>
+.red {
+	background: red;
+}
+</style>
