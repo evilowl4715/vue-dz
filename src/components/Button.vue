@@ -1,7 +1,14 @@
-<script setup></script>
+<script setup>
+defineProps({
+	customClass: {
+		type: String,
+		default: "",
+	},
+});
+</script>
 
 <template>
-	<button class="btn"><slot /></button>
+	<button :class="['btn', customClass]"><slot /></button>
 </template>
 
 <style scoped>
