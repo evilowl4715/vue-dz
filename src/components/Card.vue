@@ -12,6 +12,7 @@ const { word, actionFront, actionBack } = defineProps({
 		type: String,
 		default: "ЗАВЕРШИТЬ",
 	},
+	reverted: { type: Boolean, default: false },
 });
 
 const emit = defineEmits({
@@ -30,7 +31,7 @@ function turnOverCard() {
 </script>
 
 <template>
-	<div class="card">
+	<div class="card" :class="{ reverted: reverted }">
 		<div class="card__block card-front">
 			<div class="card__number">01</div>
 			<div class="card__word">

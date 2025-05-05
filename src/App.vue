@@ -21,8 +21,8 @@ const cards = ref(
 	}))
 );
 
-function turnOverCard() {
-	reverted.value = !reverted.value;
+function turnOverCard(index) {
+	cards.value[index].reverted = !cards.value[index].reverted;
 }
 </script>
 
@@ -41,7 +41,7 @@ function turnOverCard() {
 				<Card
 					v-for="(card, index) in cards"
 					:key="index"
-					:class="reverted ? 'card reverted' : 'card'"
+					:reverted="card.reverted"
 					:word="card.reverted ? data.wordLast : data.wordFirst"
 					:action-front="data.actionFront"
 					:action-back="data.actionBack"
