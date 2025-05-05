@@ -6,7 +6,7 @@ import Card from "./components/card.vue";
 import Score from "./components/Score.vue";
 let btnBg = "red";
 
-const scrore = ref(0);
+const score = ref(0);
 
 const data = ref({
 	wordFirst: "dust-coat",
@@ -25,7 +25,7 @@ const cards = ref(
 
 function turnOverCard(index) {
 	cards.value[index].reverted = !cards.value[index].reverted;
-	scrore.value += cards.value[index].reverted ? 1 : -1;
+	score.value += cards.value[index].reverted ? 1 : -1;
 }
 </script>
 
@@ -34,7 +34,7 @@ function turnOverCard(index) {
 		<div class="container">
 			<div class="header__row">
 				<div class="header__logo">ЗАПОМНИ СЛОВО</div>
-				<Score :count="scrore" />
+				<Score :count="score" />
 			</div>
 		</div>
 	</header>
