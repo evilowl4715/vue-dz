@@ -4,6 +4,10 @@ const { word, actionFront, actionBack } = defineProps({
 		type: String,
 		default: "нету слова",
 	},
+	translation: {
+		type: String,
+		default: "нету слова",
+	},
 	actionFront: {
 		type: String,
 		default: "ПЕРЕВЕРНУТЬ",
@@ -13,6 +17,16 @@ const { word, actionFront, actionBack } = defineProps({
 		default: "ЗАВЕРШИТЬ",
 	},
 	reverted: { type: Boolean, default: false },
+	state: {
+		type: String,
+		default: "closed",
+		validator: (val) => ["closed", "opened"].includes(val),
+	},
+	status: {
+		type: String,
+		default: "pending",
+		validator: (val) => ["success", "fail", "pending"].includes(val),
+	},
 });
 
 const emit = defineEmits({
