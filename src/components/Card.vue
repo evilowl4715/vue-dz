@@ -23,24 +23,18 @@ const props = defineProps({
 		required: true,
 	},
 });
-
-const emit = defineEmits(["turnOverCard", "setStatus"]);
+const emit = defineEmits(["turn-over-card", "set-status"]);
 
 function turnOverCard() {
-	emit("turnOverCard", {
-		word: props.word,
-		translation: props.translation,
-		state: props.state,
-		status: props.status,
-	});
+	emit("turn-over-card");
 }
 
 function yes() {
-	emit("setStatus", props.index, "success");
+	emit("set-status", props.index, "success");
 }
 
 function no() {
-	emit("setStatus", props.index, "fail");
+	emit("set-status", props.index, "fail");
 }
 </script>
 <template>
