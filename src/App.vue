@@ -1,6 +1,6 @@
 <script setup>
 let date = new Date();
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import Button from "./components/Button.vue";
 import Card from "./components/card.vue";
 import Score from "./components/Score.vue";
@@ -9,23 +9,44 @@ let btnBg = "red";
 const score = ref(0);
 
 const data = ref({
-	wordFirst: "dust-coat",
-	wordLast: "пыльник",
-	actionFront: "ПЕРЕВЕРНУТЬ",
-	actionBack: "ЗАВЕРШЕНО",
-	state: "closed",
+	word: "dust-coat",
+	translation: "пыльник",
+	state: "Перевернуть",
 	status: "pending",
 });
 
-const cards = ref(
-	Array.from({ length: 5 }, () => ({
-		reverted: false,
-	}))
-);
+const dataModified = computed(() => {
+	return [
+		{
+			word: "dust-coat",
+			translation: "пыльник",
+			state: "Перевернуть",
+			status: "pending",
+		},
+		{
+			word: "unadmitted",
+			translation: "непризнанный",
+			state: "Завершить",
+			status: "fail",
+		},
+		{
+			word: "armour-piercer",
+			translation: "бронебойный",
+			state: "Завершить",
+			status: "success",
+		},
+		{
+			word: "stamen",
+			translation: "тычинка",
+			state: "Перевернуть",
+			status: "pending",
+		},
+	];
+});
 
 function turnOverCard(index) {
-	cards.value[index].reverted = !cards.value[index].reverted;
-	score.value += cards.value[index].reverted ? 1 : -1;
+	dataModified.value[index].reverted = !dataModified.value[index].reverted;
+	score.value += dataModified.value[index].reverted ? 1 : -1;
 }
 </script>
 
@@ -42,12 +63,13 @@ function turnOverCard(index) {
 		<div class="container">
 			<div class="cards">
 				<Card
-					v-for="(card, index) in cards"
+					v-for="(card, index) in dataModified"
 					:key="index"
 					:reverted="card.reverted"
-					:word="card.reverted ? data.wordLast : data.wordFirst"
-					:action-front="data.actionFront"
-					:action-back="data.actionBack"
+					:state="card.state"
+					:status="card.status"
+					:word="card.word"
+					:translation="card.translation"
 					@turn-over-card="() => turnOverCard(index)"
 				/>
 			</div>
