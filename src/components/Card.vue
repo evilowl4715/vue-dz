@@ -2,23 +2,26 @@
 const props = defineProps({
 	word: {
 		type: String,
-		default: "нету слова",
+		required: true,
 	},
 	translation: {
 		type: String,
-		default: "нету слова",
+		required: true,
 	},
 	state: {
 		type: String,
-		default: "Перевернуть",
-		validator: (val) => ["Завершить", "Перевернуть"].includes(val),
+		required: true,
+		validator: (val) => ["Перевернуть", "Завершить"].includes(val),
 	},
 	status: {
 		type: String,
-		default: "pending",
-		validator: (val) => ["success", "fail", "pending"].includes(val),
+		required: true,
+		validator: (val) => ["pending", "success", "fail"].includes(val),
 	},
-	index: Number,
+	index: {
+		type: Number,
+		required: true,
+	},
 });
 
 const emit = defineEmits(["turnOverCard", "setStatus"]);
