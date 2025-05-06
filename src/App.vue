@@ -8,15 +8,7 @@ let btnBg = "red";
 
 const score = ref(0);
 
-const data = ref({
-	word: "dust-coat",
-	translation: "пыльник",
-	state: "Перевернуть",
-	status: "pending",
-});
-
-const dataModified = computed(() => {
-	return [
+const data = ref([
 		{
 			word: "dust-coat",
 			translation: "пыльник",
@@ -41,12 +33,12 @@ const dataModified = computed(() => {
 			state: "Перевернуть",
 			status: "pending",
 		},
-	];
-});
+	]);
+
 
 function turnOverCard(index) {
-	dataModified.value[index].reverted = !dataModified.value[index].reverted;
-	score.value += dataModified.value[index].reverted ? 1 : -1;
+	data.value[index].reverted = !data.value[index].reverted;
+	score.value += data.value[index].reverted ? 1 : -1;
 }
 </script>
 
@@ -63,7 +55,7 @@ function turnOverCard(index) {
 		<div class="container">
 			<div class="cards">
 				<Card
-					v-for="(card, index) in dataModified"
+					v-for="(card, index) in data"
 					:key="index"
 					:reverted="card.reverted"
 					:state="card.state"
