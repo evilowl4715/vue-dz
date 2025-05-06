@@ -18,6 +18,7 @@ const props = defineProps({
 		default: "pending",
 		validator: (val) => ["success", "fail", "pending"].includes(val),
 	},
+	index: Number,
 });
 
 const emit = defineEmits(["turnOverCard", "setStatus"]);
@@ -32,13 +33,12 @@ function turnOverCard() {
 }
 
 function yes() {
-	emit("setStatus", "success");
+	emit("setStatus", props.index, "success");
 }
 
 function no() {
-	emit("setStatus", "fail");
+	emit("setStatus", props.index, "fail");
 }
-
 </script>
 <template>
 	<div class="card" :class="props.state === 'Завершить' ? 'reverted' : ''">

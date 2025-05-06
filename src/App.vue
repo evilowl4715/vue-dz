@@ -68,8 +68,9 @@ function setStatus(index, newStatus) {
 					v-for="(card, index) in data"
 					v-bind="card"
 					:key="card.word"
+					:index="index"
 					@turn-over-card="() => turnOverCard(index)"
-					@setStatus="(newStatus) => setStatus(index, newStatus)"
+					@set-status="(index, newStatus) => setStatus(index, newStatus)"
 				/>
 			</div>
 		</div>
