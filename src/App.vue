@@ -1,6 +1,6 @@
 <script setup>
 let date = new Date();
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import Button from "./components/Button.vue";
 import Card from "./components/card.vue";
 import Score from "./components/Score.vue";
@@ -8,24 +8,53 @@ let btnBg = "red";
 
 const score = ref(0);
 
-const data = ref({
-	wordFirst: "dust-coat",
-	wordLast: "пыльник",
-	actionFront: "ПЕРЕВЕРНУТЬ",
-	actionBack: "ЗАВЕРШЕНО",
-	state: "closed",
-	status: "pending",
-});
-
-const cards = ref(
-	Array.from({ length: 5 }, () => ({
-		reverted: false,
-	}))
-);
+const data = ref([
+	{
+		word: "dust-coat",
+		translation: "пыльник",
+		state: "Перевернуть",
+		status: "pending",
+	},
+	{
+		word: "unadmitted",
+		translation: "непризнанный",
+		state: "Завершить",
+		status: "fail",
+	},
+	{
+		word: "armour-piercer",
+		translation: "бронебойный",
+		state: "Завершить",
+		status: "success",
+	},
+	{
+		word: "stamen",
+		translation: "тычинка",
+		state: "Перевернуть",
+		status: "pending",
+	},
+]);
 
 function turnOverCard(index) {
-	cards.value[index].reverted = !cards.value[index].reverted;
-	score.value += cards.value[index].reverted ? 1 : -1;
+	const card = data.value[index];
+	if (!card) return;
+
+	if (card.state === "Перевернуть") {
+		setCardState(index, "Завершить");
+		score.value += 1;
+	} else {
+		setCardState(index, "Перевернуть");
+		score.value = Math.max(0, score.value - 1);
+		setCardStatus(index, "pending");
+	}
+}
+
+function setCardStatus(index, status) {
+	data.value[index].status = status;
+}
+
+function setCardState(index, newState) {
+	data.value[index].state = newState;
 }
 </script>
 
@@ -42,13 +71,12 @@ function turnOverCard(index) {
 		<div class="container">
 			<div class="cards">
 				<Card
-					v-for="(card, index) in cards"
-					:key="index"
-					:reverted="card.reverted"
-					:word="card.reverted ? data.wordLast : data.wordFirst"
-					:action-front="data.actionFront"
-					:action-back="data.actionBack"
+					v-for="(card, index) in data"
+					:key="card.word"
+					v-bind="card"
+					:index="index"
 					@turn-over-card="() => turnOverCard(index)"
+					@set-status="(i, s) => setCardStatus(i, s)"
 				/>
 			</div>
 		</div>

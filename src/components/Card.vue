@@ -1,70 +1,111 @@
 <script setup>
-const { word, actionFront, actionBack } = defineProps({
+const props = defineProps({
 	word: {
 		type: String,
-		default: "нету слова",
+		required: true,
 	},
 	translation: {
 		type: String,
-		default: "нету слова",
+		required: true,
 	},
-	actionFront: {
-		type: String,
-		default: "ПЕРЕВЕРНУТЬ",
-	},
-	actionBack: {
-		type: String,
-		default: "ЗАВЕРШИТЬ",
-	},
-	reverted: { type: Boolean, default: false },
 	state: {
 		type: String,
-		default: "closed",
-		validator: (val) => ["closed", "opened"].includes(val),
+		required: true,
+		validator: (val) => ["Перевернуть", "Завершить"].includes(val),
 	},
 	status: {
 		type: String,
-		default: "pending",
-		validator: (val) => ["success", "fail", "pending"].includes(val),
+		required: true,
+		validator: (val) => ["pending", "success", "fail"].includes(val),
+	},
+	index: {
+		type: Number,
+		required: true,
 	},
 });
-
-const emit = defineEmits({
-	turnOverCard(payload) {
-		return payload;
-	},
-});
+const emit = defineEmits(["turn-over-card", "setStatus"]);
 
 function turnOverCard() {
-	emit("turnOverCard", {
-		word: word,
-		actionFront: actionFront,
-		actionBack: actionBack,
+	emit("turn-over-card", {
+		word: props.word,
+		translation: props.translation,
+		state: props.state,
+		status: props.status,
+		index: props.index,
 	});
 }
-</script>
 
+function yes() {
+	emit("setStatus", props.index, "success");
+}
+
+function no() {
+	emit("setStatus", props.index, "fail");
+}
+</script>
 <template>
-	<div class="card" :class="{ reverted: reverted }">
-		<div class="card__block card-front">
+	<div class="card" :class="props.state === 'Завершить' ? 'reverted' : ''">
+		<div v-show="props.state === 'Перевернуть'" class="card__block card-front">
 			<div class="card__number">01</div>
 			<div class="card__word">
-				{{ word }}
+				{{ props.word }}
 			</div>
 			<div class="card__bottom">
 				<div class="card__action" @click="turnOverCard()">
-					{{ actionFront }}
+					{{ props.state }}
 				</div>
 			</div>
 		</div>
 
-		<div class="card__block card-back">
+		<div v-show="props.state === 'Завершить'" class="card__block card-back">
+			<div v-show="props.status === 'fail'">
+				<svg
+					width="48"
+					height="48"
+					viewBox="0 0 48 48"
+					fill="none"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<path
+						fill-rule="evenodd"
+						clip-rule="evenodd"
+						d="M30.922 28.778L28.8 30.9L23.998 26.102L19.198 30.894L17.078 28.772L21.876 23.982L17.078 19.186L19.2 17.064L24 21.862L28.802 17.068L30.922 19.192L26.122 23.982L30.922 28.778ZM24 4.5C13.248 4.5 4.5 13.248 4.5 24C4.5 34.752 13.248 43.5 24 43.5C34.752 43.5 43.5 34.752 43.5 24C43.5 13.248 34.752 4.5 24 4.5Z"
+						fill="#D00303"
+					/>
+				</svg>
+			</div>
+			<div v-show="props.status === 'success'">
+				<svg
+					width="36"
+					height="36"
+					viewBox="0 0 36 36"
+					fill="none"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<path
+						fill-rule="evenodd"
+						clip-rule="evenodd"
+						d="M19.8129 24.1071L19.416 24.8105H17.8652L17.3982 24.1902C17.3705 24.1477 14.6252 20.0455 11.0769 17.8006L9.90462 17.0622L11.3852 14.7212L12.5538 15.4597C15.1108 17.0751 17.2338 19.4345 18.4855 21.0092C20.4517 18.0462 25.056 11.8745 32.1175 6.86954C28.8185 2.69354 23.7212 0 18 0C8.07508 0 0 8.07508 0 18C0 27.9249 8.07508 36 18 36C27.9249 36 36 27.9249 36 18C36 14.7932 35.1471 11.7877 33.672 9.17723C24.7495 15.5391 19.8665 24.0129 19.8129 24.1071Z"
+						fill="#09BB00"
+					/>
+				</svg>
+			</div>
 			<div class="card__number">01</div>
 			<div class="card__word">
-				{{ word }}
+				{{ props.translation }}
 			</div>
 			<div class="card__bottom">
-				<div class="card__action" @click="turnOverCard()">{{ actionBack }}</div>
+				<div v-show="props.status == 'pending'" class="card__action">
+					<button @click="no()">нет</button>
+					<button @click="yes()">да</button>
+				</div>
+				<div
+					v-show="props.status !== 'pending'"
+					class="card__action"
+					@click="turnOverCard()"
+				>
+					{{ props.state }}
+				</div>
 			</div>
 		</div>
 	</div>
