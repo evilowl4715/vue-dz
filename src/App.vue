@@ -9,36 +9,40 @@ let btnBg = "red";
 const score = ref(0);
 
 const data = ref([
-		{
-			word: "dust-coat",
-			translation: "пыльник",
-			state: "Перевернуть",
-			status: "pending",
-		},
-		{
-			word: "unadmitted",
-			translation: "непризнанный",
-			state: "Завершить",
-			status: "fail",
-		},
-		{
-			word: "armour-piercer",
-			translation: "бронебойный",
-			state: "Завершить",
-			status: "success",
-		},
-		{
-			word: "stamen",
-			translation: "тычинка",
-			state: "Перевернуть",
-			status: "pending",
-		},
-	]);
+	{
+		word: "dust-coat",
+		translation: "пыльник",
+		state: "Перевернуть",
+		status: "pending",
+	},
+	{
+		word: "unadmitted",
+		translation: "непризнанный",
+		state: "Завершить",
+		status: "fail",
+	},
+	{
+		word: "armour-piercer",
+		translation: "бронебойный",
+		state: "Завершить",
+		status: "success",
+	},
+	{
+		word: "stamen",
+		translation: "тычинка",
+		state: "Перевернуть",
+		status: "pending",
+	},
+]);
 
 
 function turnOverCard(index) {
-	data.value[index].reverted = !data.value[index].reverted;
-	score.value += data.value[index].reverted ? 1 : -1;
+	const card = data.value[index];
+	if (card.state === 'Перевернуть') {
+		card.state = 'Завершить';
+		score.value += 1;
+	}
+	console.log(index)
 }
 </script>
 
@@ -56,12 +60,8 @@ function turnOverCard(index) {
 			<div class="cards">
 				<Card
 					v-for="(card, index) in data"
-					:key="index"
-					:reverted="card.reverted"
-					:state="card.state"
-					:status="card.status"
-					:word="card.word"
-					:translation="card.translation"
+					v-bind="card"
+					:key="card.word"
 					@turn-over-card="() => turnOverCard(index)"
 				/>
 			</div>

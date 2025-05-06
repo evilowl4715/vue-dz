@@ -8,7 +8,6 @@ const { word, translation, state, status } = defineProps({
 		type: String,
 		default: "нету слова",
 	},
-	reverted: { type: Boolean, default: false },
 	state: {
 		type: String,
 		default: "Перевернуть",
@@ -38,8 +37,8 @@ function turnOverCard() {
 </script>
 
 <template>
-	<div class="card" :class="reverted ? 'reverted' : ''">
-		<div v-show="!reverted" class="card__block card-front">
+	<div class="card" :class="state === 'Завершить' ? 'reverted' : ''">
+		<div v-show="state === 'Перевернуть'" class="card__block card-front">
 			<div class="card__number">01</div>
 			<div class="card__word">
 				{{ word }}
@@ -51,7 +50,7 @@ function turnOverCard() {
 			</div>
 		</div>
 
-		<div v-show="reverted" class="card__block card-back">
+		<div v-show="state === 'Завершить'" class="card__block card-back">
 			<div v-show="status === 'fail'">
 				<svg
 					width="48"
