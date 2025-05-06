@@ -35,14 +35,20 @@ const data = ref([
 	},
 ]);
 
-
 function turnOverCard(index) {
 	const card = data.value[index];
-	if (card.state === 'Перевернуть') {
-		card.state = 'Завершить';
+	if (card.state === "Перевернуть") {
+		card.state = "Завершить";
 		score.value += 1;
+	} else if (card.state === "Завершить") {
+		card.state = "Перевернуть";
+		score.value -= 1;
+		card.status = "pending";
 	}
-	console.log(index)
+}
+
+function setStatus(index, newStatus) {
+	data.value[index].status = newStatus;
 }
 </script>
 
@@ -63,6 +69,7 @@ function turnOverCard(index) {
 					v-bind="card"
 					:key="card.word"
 					@turn-over-card="() => turnOverCard(index)"
+					@setStatus="(newStatus) => setStatus(index, newStatus)"
 				/>
 			</div>
 		</div>

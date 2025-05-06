@@ -1,5 +1,5 @@
 <script setup>
-const { word, translation, state, status } = defineProps({
+const props = defineProps({
 	word: {
 		type: String,
 		default: "нету слова",
@@ -20,38 +20,42 @@ const { word, translation, state, status } = defineProps({
 	},
 });
 
-const emit = defineEmits({
-	turnOverCard(payload) {
-		return payload;
-	},
-});
+const emit = defineEmits(["turnOverCard", "setStatus"]);
 
 function turnOverCard() {
 	emit("turnOverCard", {
-		word: word,
-		translation: translation,
-		state: state,
-		status: status,
+		word: props.word,
+		translation: props.translation,
+		state: props.state,
+		status: props.status,
 	});
 }
-</script>
 
+function yes() {
+	emit("setStatus", "success");
+}
+
+function no() {
+	emit("setStatus", "fail");
+}
+
+</script>
 <template>
-	<div class="card" :class="state === 'Завершить' ? 'reverted' : ''">
-		<div v-show="state === 'Перевернуть'" class="card__block card-front">
+	<div class="card" :class="props.state === 'Завершить' ? 'reverted' : ''">
+		<div v-show="props.state === 'Перевернуть'" class="card__block card-front">
 			<div class="card__number">01</div>
 			<div class="card__word">
-				{{ word }}
+				{{ props.word }}
 			</div>
 			<div class="card__bottom">
 				<div class="card__action" @click="turnOverCard()">
-					{{ state }}
+					{{ props.state }}
 				</div>
 			</div>
 		</div>
 
-		<div v-show="state === 'Завершить'" class="card__block card-back">
-			<div v-show="status === 'fail'">
+		<div v-show="props.state === 'Завершить'" class="card__block card-back">
+			<div v-show="props.status === 'fail'">
 				<svg
 					width="48"
 					height="48"
@@ -67,7 +71,7 @@ function turnOverCard() {
 					/>
 				</svg>
 			</div>
-			<div v-show="status === 'success'">
+			<div v-show="props.status === 'success'">
 				<svg
 					width="36"
 					height="36"
@@ -85,19 +89,19 @@ function turnOverCard() {
 			</div>
 			<div class="card__number">01</div>
 			<div class="card__word">
-				{{ translation }}
+				{{ props.translation }}
 			</div>
 			<div class="card__bottom">
-				<div v-show="status == 'pending'" class="card__action">
-					<button>нет</button>
-					<button>да</button>
+				<div v-show="props.status == 'pending'" class="card__action">
+					<button @click="no()">нет</button>
+					<button @click="yes()">да</button>
 				</div>
 				<div
-					v-show="status !== 'pending'"
+					v-show="props.status !== 'pending'"
 					class="card__action"
 					@click="turnOverCard()"
 				>
-					{{ state }}
+					{{ props.state }}
 				</div>
 			</div>
 		</div>
